@@ -87,16 +87,25 @@ lab2= Labirynt(0,0, skjerm.get_width()/25, skjerm.get_height())
 lab3= Labirynt((skjerm.get_width()/25)*24,0,skjerm.get_width(),skjerm.get_height())
 lab4= Labirynt(0,(skjerm.get_height()/25)*24, skjerm.get_width(), skjerm.get_height()/25)
 #indre vegger fra venstre til høyre som lesing
-lab5= Labirynt(skjerm.get_width()/5,0, skjerm.get_width()/25, skjerm.get_height()/5)
-lab7= Labirynt(skjerm.get_width()/5,skjerm.get_height()/5, skjerm.get_width()/5, skjerm.get_height()/25)
-lab8= Labirynt((skjerm.get_width()/7)*4,0, skjerm.get_width()/25, (skjerm.get_height()/25)*6)
-lab9= Labirynt((skjerm.get_width()/7)*5,0, skjerm.get_width()/25, (skjerm.get_height()/25)*6)
-lab6= Labirynt(0,skjerm.get_height()/3, skjerm.get_width()/2, skjerm.get_height()/25)
-lab10= Labirynt((skjerm.get_width()/5),(skjerm.get_height()/4)*3, skjerm.get_width()/2, skjerm.get_height()/25)
-lab11= Labirynt((skjerm.get_width()/5),(skjerm.get_height()/4)*3, skjerm.get_width()/25, skjerm.get_height()/25*4)
-lab12= Labirynt((skjerm.get_width()/3)*2,(skjerm.get_height()/4)*3, skjerm.get_width()/25, skjerm.get_height()/25*4)
+lab5= Labirynt(skjerm.get_width()/5,0, skjerm.get_width()/25, skjerm.get_height()/5)#vertikal
+lab8= Labirynt((skjerm.get_width()/7)*4,0, skjerm.get_width()/25, (skjerm.get_height()/25)*6)#vertikal
+lab9= Labirynt((skjerm.get_width()/7)*5,0, skjerm.get_width()/25, (skjerm.get_height()/25)*6)#vertikal
+lab7= Labirynt(skjerm.get_width()/5,skjerm.get_height()/5, skjerm.get_width()/5, skjerm.get_height()/25)#horisontal
+lab6= Labirynt(0,skjerm.get_height()/3, skjerm.get_width()/2, skjerm.get_height()/25)#horisontal
+lab14= Labirynt(skjerm.get_width()/6,skjerm.get_height()/3, skjerm.get_width()/25, skjerm.get_height()/4 )#vertikal
+lab13= Labirynt((skjerm.get_width()/14)*11, skjerm.get_height()/3,skjerm.get_width()/25, skjerm.get_height()/3*2)#vertikal
 
-laberyntlist=[lab1, lab2, lab3, lab4, lab5,lab6,lab7, lab8, lab9, lab10, lab11, lab12]
+lab15= Labirynt((skjerm.get_width()/7)*2, skjerm.get_height()/20*9, skjerm.get_width()/3, skjerm.get_height()/25)# horisontal
+lab16= Labirynt((skjerm.get_width()/7*2), skjerm.get_height()/20*9, skjerm.get_width()/25, skjerm.get_height()/5)#vertikal
+lab17= Labirynt((skjerm.get_width()*(2/7+1/3)-1), skjerm.get_height()/20*9, skjerm.get_width()/25, skjerm.get_height()/5)#vertikal
+lab18= Labirynt(skjerm.get_width()/7*2, skjerm.get_height()*(9/20+1/5), skjerm.get_width()/7, skjerm.get_height()/25)#horisontal
+lab19= Labirynt((skjerm.get_width()*(1/7+1/3+1/25)-1),skjerm.get_height()*(9/20+1/5), skjerm.get_width()/7, skjerm.get_height()/25)#horisotal
+
+lab10= Labirynt((skjerm.get_width()/5),(skjerm.get_height()/4)*3, skjerm.get_width()/2, skjerm.get_height()/25)#hoisontal
+lab11= Labirynt((skjerm.get_width()/5),(skjerm.get_height()/4)*3, skjerm.get_width()/25, skjerm.get_height()/25*4)#vertikal
+lab12= Labirynt((skjerm.get_width()/3)*2,(skjerm.get_height()/4)*3, skjerm.get_width()/25, skjerm.get_height()/25*4)#vertikal
+
+laberyntlist=[lab1, lab2, lab3, lab4, lab5,lab6,lab7, lab8, lab9, lab10, lab11, lab12, lab13, lab14, lab15,lab16, lab17, lab18, lab19]
 while running:
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
