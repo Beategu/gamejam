@@ -19,9 +19,9 @@ class Packman(Felles):
         tast= pygame.key.get_pressed()
         if tast[pygame.K_a]:
             self.rekttest=pygame.Rect((self.x-self.fart,self.y),(self.strx,self.stry))
-            self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
+            #self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
             self.status=True
-            pygame.draw.rect(skjerm, "Blue", self.rekttest)
+            #pygame.draw.rect(skjerm, "Blue", self.rekttest)
             for x in laberyntlist:
                 if (pygame.Rect.colliderect(x.rekt, self.rekttest)):
                     self.status=False
@@ -31,9 +31,9 @@ class Packman(Felles):
                 
         elif tast[pygame.K_d]:
             self.rekttest=pygame.Rect((self.x+self.fart,self.y),(self.strx,self.stry))
-            self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
+            #self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
             self.status=True
-            pygame.draw.rect(skjerm, "Blue", self.rekttest)
+            #pygame.draw.rect(skjerm, "Blue", self.rekttest)
             for x in laberyntlist:
                 if (pygame.Rect.colliderect(x.rekt, self.rekttest)):
                     self.status=False
@@ -43,9 +43,9 @@ class Packman(Felles):
                 
         elif tast[pygame.K_w]:
             self.rekttest=pygame.Rect((self.x,self.y-self.fart),(self.strx,self.stry))
-            self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
+            #self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
             self.status=True
-            pygame.draw.rect(skjerm, "Blue", self.rekttest)
+            #pygame.draw.rect(skjerm, "Blue", self.rekttest)
             for x in laberyntlist:
                 if (pygame.Rect.colliderect(x.rekt, self.rekttest)):
                     self.status=False
@@ -55,15 +55,19 @@ class Packman(Felles):
                 
         elif tast[pygame.K_s]:
             self.rekttest=pygame.Rect((self.x,self.y+self.fart),(self.strx,self.stry))
-            self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
+            #self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
             self.status=True
-            pygame.draw.rect(skjerm, "Blue", self.rekttest)
+            #pygame.draw.rect(skjerm, "Blue", self.rekttest)
             for x in laberyntlist:
                 if (pygame.Rect.colliderect(x.rekt, self.rekttest)):
                     self.status=False
             if self.status:
 
                 self.y+=self.fart
+    def tegn2(self):
+        skjerm.blit(pakman, (self.x, self.y))
+        self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
+
                 
     def livEllerDød(self):
         status=True
@@ -98,6 +102,9 @@ class Fiende (Felles):
                 if pygame.Rect.colliderect(x.rekt, self.rekt):
                     self.fart=self.fart*(-1)
             self.x+=self.fart
+    def tegn2(self):
+        skjerm.blit(blue_image, (self.x, self.y))
+        self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
     
 
 
@@ -106,8 +113,8 @@ class Poeng(Felles):
         self.x= random.randint(0,skjerm.get_width())
         self.y=random.randint(0,skjerm.get_height())
         self.farge="green"
-        self.strx= random.randint(3,int(skjerm.get_width()/60))
-        self.stry= random.randint(3,int(skjerm.get_height()/60))
+        self.strx= (skjerm.get_width()/40)
+        self.stry= (skjerm.get_height()/40)
         super().__init__( self.x, self.y, self.farge, self.strx, self.stry)
         
     def oppdater(self):
@@ -117,18 +124,21 @@ class Poeng(Felles):
                 self.x= random.randint(0,skjerm.get_width())
                 self.y=random.randint(0,skjerm.get_height())
                 self.farge="green"
-                self.strx= random.randint(3,int(skjerm.get_width()/50))
-                self.stry= random.randint(3,int(skjerm.get_height()/50))
+                self.strx= ((skjerm.get_width()/40))
+                self.stry= (skjerm.get_height()/40)
                 break
         if pygame.Rect.colliderect(self.rekt, pack.rekt):
                 self.x= random.randint(0,skjerm.get_width())
                 self.y=random.randint(0,skjerm.get_height())
                 self.farge="green"
-                self.strx= random.randint(3,int(skjerm.get_width()))
-                self.stry= random.randint(3,int(skjerm.get_height()))
+                self.strx= (skjerm.get_width()/40)
+                self.stry= (skjerm.get_height()/40)
                 return True
         else:
             return False
+    def tegn2(self):
+        skjerm.blit(penge, (self.x, self.y))
+        self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
 
 
 
@@ -139,6 +149,12 @@ import random
 import pygame 
 
 pygame.init()
+blue_image= pygame.image.load("MicrosoftTeams-image (6).png")
+blue_rect= blue_image.get_rect()
+pakman= pygame.image.load("MicrosoftTeams-image (7).png")
+pak_rect= blue_image.get_rect()
+penge= pygame.image.load("MicrosoftTeams-image (8).png")
+penge_rect= blue_image.get_rect()
 pygame.font.init()
 skjerm= pygame.display.set_mode((500,500))
 font= pygame.font.SysFont("Arial", int(skjerm.get_height()/20))
@@ -208,11 +224,11 @@ while running:
         for x in laberyntlist:
             x.tegn()
         pack.oppdater()
-        pack.tegn()
+        pack.tegn2()
         for x in fiender:
             x.bevege()
-            x.tegn()
-        poeng.tegn()
+            x.tegn2()
+        poeng.tegn2()
         if poeng.oppdater():
             sum+=1
         tekst2= font.render(str(sum), True, "White")
@@ -226,7 +242,5 @@ while running:
         tekst3= font.render((f"du fikk {sum} poeng"), True, "White")
         skjerm.blit(tekst3, (skjerm.get_width()/3, skjerm.get_height()/2))
     pygame.display.flip()
-
-
 
 pygame.quit()
