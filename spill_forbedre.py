@@ -90,6 +90,7 @@ class Labirynt:
         plassy=0
         
         for z in self.bane:
+            print(z)
             liste=z.strip("\n")
             liste=liste.split(".")
             print (liste)
