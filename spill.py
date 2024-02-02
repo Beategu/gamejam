@@ -189,8 +189,8 @@ lab12= Labirynt((skjerm.get_width()/3)*2,(skjerm.get_height()/4)*3, skjerm.get_w
 
 laberyntlist=[lab1, lab2, lab3, lab4, lab5,lab6,lab7, lab8, lab9, lab10, lab11, lab12, lab13, lab14, lab15,lab16, lab17, lab18, lab19]
 
+#lager fiende objekter
 fiende= Fiende(skjerm.get_width()/12*11, skjerm.get_height()/7, "y", skjerm.get_width()/30, skjerm.get_height()/30,3)
-
 fiende2= Fiende(skjerm.get_width()/12*10, skjerm.get_height()/7*6, "y", skjerm.get_width()/30, skjerm.get_height()/30,5)
 fiende3= Fiende(skjerm.get_width()/12, skjerm.get_height()/4, "x", skjerm.get_width()/30, skjerm.get_height()/30,6)
 fiende4= Fiende(skjerm.get_width()/12, skjerm.get_height()/12*11, "x", skjerm.get_width()/30, skjerm.get_height()/30,2)
@@ -199,6 +199,7 @@ fiende6= Fiende(skjerm.get_width()/12*10, skjerm.get_height()/7*6, "y", skjerm.g
 fiende7= Fiende(skjerm.get_width()/12*9, skjerm.get_height()/7*6, "y", skjerm.get_width()/30, skjerm.get_height()/30,4)
 fiende8= Fiende(skjerm.get_width()/2, skjerm.get_height()/12*5, "x", skjerm.get_width()/30, skjerm.get_height()/30,7)
 
+#lager en liste av alle fiendene slik at vi senere fort kan gå gjennom alle
 fiender=[fiende,fiende2, fiende3, fiende4, fiende5, fiende6, fiende7, fiende8]
 
 poeng=Poeng()
