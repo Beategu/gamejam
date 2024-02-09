@@ -12,25 +12,7 @@ class Felles:
 
 class Packman():
     def __init__(self, navn):
-        with open (navn, "r") as labfil:
-            self.kord=labfil.readline()
-            self.bane=labfil.readlines()
-            self.strxgrid= skjerm.get_width()/int(self.kord.split(",")[0])
-            self.strygrid= skjerm.get_height()/int(self.kord.split(",")[1])
-            self.strx= self.strxgrid/3
-            self.stry= self.strygrid/3
-        self.fart=5
-        plassy=0
-        for x in self.bane:
-            x=x.strip("\n")
-            x=x.split(".")
-            plassx=0
-            for z in range (0,(int(self.kord.split(",")[0]))):
-                if x[z]=="l":
-                    self.x= self.strxgrid*plassx+ self.strxgrid/2-self.strx/2
-                    self.y= self.strygrid*plassy+self.strygrid/2-self.stry/2
-                plassx+=1
-            plassy+=1
+        self.byttBane(navn)
     
     def oppdater(self):
         tast= pygame.key.get_pressed()
@@ -84,7 +66,27 @@ class Packman():
     def tegn2(self):
         skjerm.blit(pakman, (self.x, self.y))
         self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
+    def byttBane(self, navn):
 
+        with open (navn, "r") as labfil:
+            self.kord=labfil.readline()
+            self.bane=labfil.readlines()
+            self.strxgrid= skjerm.get_width()/int(self.kord.split(",")[0])
+            self.strygrid= skjerm.get_height()/int(self.kord.split(",")[1])
+            self.strx= self.strxgrid/3
+            self.stry= self.strygrid/3
+        self.fart=5
+        plassy=0
+        for x in self.bane:
+            x=x.strip("\n")
+            x=x.split(".")
+            plassx=0
+            for z in range (0,(int(self.kord.split(",")[0]))):
+                if x[z]=="l":
+                    self.x= self.strxgrid*plassx+ self.strxgrid/2-self.strx/2
+                    self.y= self.strygrid*plassy+self.strygrid/2-self.stry/2
+                plassx+=1
+            plassy+=1
                 
     def livEllerDød(self):
         status=True
@@ -97,6 +99,11 @@ class Packman():
 
 class Labirynt:
     def __init__(self, navn):
+        self.byttBane(navn)
+    def tegn2(self):
+        for x in self.liste:
+            pygame.draw.rect(skjerm, "purple", x)
+    def byttBane(self, navn):     
         with open (navn, "r") as labfil:
             self.kord=labfil.readline()
             self.bane=labfil.readlines()
@@ -117,14 +124,38 @@ class Labirynt:
                     self.liste.append(self.rekt)
             plassy+=self.stry
         print (self.liste)
-    def tegn2(self):
-
-        for x in self.liste:
-            pygame.draw.rect(skjerm, "purple", x)
-            
 
 class Fiende:
     def __init__(self, navn):
+        self.byttBane(navn)
+
+    def bevege(self):
+        self.rektliste=[]
+        for x in self.spøk:    
+            if x[2]=="s":
+                rekt= pygame.Rect((x[0]+x[-1],x[1]),(self.strx,self.stry))
+                for z in lab.liste:
+                    if pygame.Rect.colliderect(z, rekt):
+                        x[-1]=x[-1]*-1
+                x[0]+=x[-1]
+            elif x[2]=="y":
+                rekt= pygame.Rect((x[0],x[1]+x[-1]),(self.strx,self.stry))
+                for z in lab.liste:
+                    if pygame.Rect.colliderect(z, rekt):
+                        x[-1]=x[-1]*-1
+                x[1]+=x[-1]
+            
+            rekt= pygame.Rect((x[0],x[1]),(self.strx,self.stry))
+            self.rektliste.append(rekt)
+
+        #print("hello")
+    def tegn2(self):
+        #skjerm.blit(blue_image, (self.x, self.y))
+        for x in self.rektliste:
+            pygame.draw.rect(skjerm, "blue", x)
+            #pygame.Rect.colliderect(self.rekt, pack.rekt):
+
+    def byttBane(self, navn):
         with open (navn, "r") as labfil:
             self.kord=labfil.readline()
             self.bane=labfil.readlines()
@@ -156,31 +187,6 @@ class Fiende:
             plassy+=1
         print("oink")
 
-    def bevege(self):
-        self.rektliste=[]
-        for x in self.spøk:    
-            if x[2]=="s":
-                rekt= pygame.Rect((x[0]+x[-1],x[1]),(self.strx,self.stry))
-                for z in lab.liste:
-                    if pygame.Rect.colliderect(z, rekt):
-                        x[-1]=x[-1]*-1
-                x[0]+=x[-1]
-            elif x[2]=="y":
-                rekt= pygame.Rect((x[0],x[1]+x[-1]),(self.strx,self.stry))
-                for z in lab.liste:
-                    if pygame.Rect.colliderect(z, rekt):
-                        x[-1]=x[-1]*-1
-                x[1]+=x[-1]
-            
-            rekt= pygame.Rect((x[0],x[1]),(self.strx,self.stry))
-            self.rektliste.append(rekt)
-
-        #print("hello")
-    def tegn2(self):
-        #skjerm.blit(blue_image, (self.x, self.y))
-        for x in self.rektliste:
-            pygame.draw.rect(skjerm, "blue", x)
-            #pygame.Rect.colliderect(self.rekt, pack.rekt):
 
     
 
@@ -234,24 +240,24 @@ pak_rect= blue_image.get_rect()
 penge= pygame.image.load("MicrosoftTeams-image (8).png")
 penge_rect= blue_image.get_rect()
 pygame.font.init()
-skjerm= pygame.display.set_mode((900,900))
+skjerm= pygame.display.set_mode((800,800))
 font= pygame.font.SysFont("Arial", int(skjerm.get_height()/20))
 font2= pygame.font.SysFont("Arial", int(skjerm.get_height()/4))
 
 klokke=pygame.time.Clock()
 running=True
 pack=Packman("test.txt")
-
-
-#lager en liste av alle fiendene slik at vi senere fort kan gå gjennom alle
 fiende=Fiende("test.txt")
 lab=Labirynt("test.txt")
-poeng=Poeng()
 
+poeng=Poeng()
+baner=["bane.txt"]
 start=True
 igang=False
 slutt=False
+sluttvunnet= False
 sum=0
+bane=0
 while running:
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
@@ -264,28 +270,47 @@ while running:
             start=False
             igang=True
         tekst=font.render("Klikk space for å starte", True, "White")
+        tekst2=font.render("Det er 4 nivåer", True, "White")
+        tekst3=font.render("få ti poeng for å nå neste nivå", True, "White")
         skjerm.blit(tekst, (skjerm.get_width()/3, skjerm.get_height()/2))
+        skjerm.blit(tekst2, (skjerm.get_width()/3, skjerm.get_height()/2+40))
+        skjerm.blit(tekst3, (skjerm.get_width()/3, skjerm.get_height()/2+80))
     elif igang:
 
         pack.oppdater()
-    
+        fiende.bevege()
+        fiende.tegn2()
         
         lab.tegn2()
         pack.tegn2()
         if poeng.oppdater():
             sum+=1
         poeng.tegn2()
+        if sum>=10:
+            sum=0
+            if bane>=(len(baner)):
+                igang=False
+                sluttvunnet=True
+            else:
+                lab.byttBane(baner[bane])
+                pack.byttBane(baner[bane])
+                fiende.byttBane(baner[bane])
+                bane+=1
+
         tekst2= font.render(str(sum), True, "White")
-        fiende.bevege()
-        fiende.tegn2()
+
         skjerm.blit(tekst2, (skjerm.get_width()/40, skjerm.get_height()/60))
         if pack.livEllerDød()==False:
             igang=False
             slutt=True
         
     if slutt:
-        tekst3= font.render((f"du fikk {sum} poeng"), True, "White")
+        tekst3= font.render((f"du tapte"), True, "White")
         skjerm.blit(tekst3, (skjerm.get_width()/3, skjerm.get_height()/2))
+    if sluttvunnet:
+        tekst3= font.render((f"du vant a"), True, "White")
+        skjerm.blit(tekst3, (skjerm.get_width()/3, skjerm.get_height()/2))
+
     pygame.display.flip()
 
 pygame.quit()
