@@ -1,0 +1,11 @@
+10,10
+x.x.x.x.x.x.x.x.x.x
+x.l.o.o.s.x.o.x.y.x
+x.o.o.o.x.y.o.x.o.x
+x.o.x.s.o.o.o.o.o.x
+x.o.x.o.x.o.o.x.o.x
+x.y.o.y.x.o.x.x.o.x
+x.x.o.x.x.x.x.x.o.x
+x.o.o.x.y.o.x.o.y.x
+x.s.o.o.o.o.o.o.o.x
+x.x.x.x.x.x.x.x.x.x
