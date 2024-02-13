@@ -249,7 +249,7 @@ class Poeng: #klasse for myntene
         else:
             return False #hvis ikke spiller har fått poeng returner false slik at vi vet dette
         print("oink")
-    def tegn2(self):
+    def tegn2(self): #tegner penge
         skjerm.blit(penge, (self.x, self.y))
         self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
 
@@ -417,8 +417,8 @@ while running:
         tekst4_rect= tekst4.get_rect(center= (skjerm.get_width()/2, skjerm.get_height()/3))
         skjerm.blit(tekst4, tekst4_rect)
     tast= pygame.key.get_pressed()
-    if tast[pygame.K_SPACE] and start==False and igang==False: #skjekker om mellomromknappen er trykket
-            #dersom mellomrom er trykket så er spillet ikke i start-fasen lenger men i igang-fasen, derfor oppdaterer vi variablene
+    if tast[pygame.K_SPACE] and start==False and igang==False: #skjekker om mellomromknappen er trykket og spille ikke er i startfase eller igang
+            #resetter og gjør klar for nytt forsøk
             start=False
             igang=True
             sluttvunnet=False 
