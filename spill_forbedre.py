@@ -9,6 +9,7 @@ class Packman(): # klasse til spiller (packman)
         if tast[pygame.K_a]:#(til venstre)
             #her lager vi et ekstra rektangel litt forskjøvet i retningen spilleren vill (i dette tilfelle venstret)
             self.rekttest=pygame.Rect((self.x-self.fart,self.y),(self.strx,self.stry))
+            self.pakman=pakmanvenstre #oppdaterer hvilket bilde som skal i bruk
             self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
             self.status=True
             #pygame.draw.rect(skjerm, "Blue", self.rekttest)
@@ -21,10 +22,11 @@ class Packman(): # klasse til spiller (packman)
                 
         elif tast[pygame.K_d]:# (til høyre)
             #samme logikk som forklart under "til venstre" bare annen retning
+            self.pakman= pakmanhøyre
             self.rekttest=pygame.Rect((self.x+self.fart,self.y),(self.strx,self.stry))
             self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
             self.status=True
-            pygame.draw.rect(skjerm, "Blue", self.rekttest)
+            #pygame.draw.rect(skjerm, "Blue", self.rekttest)
             for x in lab.liste:
                 if (pygame.Rect.colliderect(x, self.rekttest)):
                     self.status=False
@@ -34,10 +36,11 @@ class Packman(): # klasse til spiller (packman)
                 
         elif tast[pygame.K_w]:
             #fungerer på samme måte som forklart under "til venstre", bare at den beveger seg oppover i y aksen i stedet
+            self.pakman=pakmanopp
             self.rekttest=pygame.Rect((self.x,self.y-self.fart),(self.strx,self.stry))
             self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
             self.status=True
-            pygame.draw.rect(skjerm, "Blue", self.rekttest)
+            #pygame.draw.rect(skjerm, "Blue", self.rekttest)
             for x in lab.liste:
                 if (pygame.Rect.colliderect(x, self.rekttest)):
                     self.status=False
@@ -47,6 +50,7 @@ class Packman(): # klasse til spiller (packman)
                 
         elif tast[pygame.K_s]:
             #samme logikk som forklart ved "til venstre" bare med annen retning
+            self.pakman=pakmaned
             self.rekttest=pygame.Rect((self.x,self.y+self.fart),(self.strx,self.stry))
             #self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
             self.status=True
@@ -59,11 +63,12 @@ class Packman(): # klasse til spiller (packman)
                 self.y+=self.fart
 
     def tegn2(self): #metode som tegner packman
-        skjerm.blit(pakman, (self.x, self.y))
+        skjerm.blit(self.pakman, (self.x, self.y))
         self.rekt=pygame.Rect((self.x,self.y),(self.strx,self.stry))
 
     def byttBane(self, navn): #hver gang vi skal bytte bane/lage nytt packman objekt brukes denne metoden
         #(måten vi har tenkt på er at filen som leses er et rutenett)
+        self.pakman=pakmanhøyre #startbilde til packman
         with open (navn, "r") as labfil: #leser av fil 
             self.kord=labfil.readline()
             self.bane=labfil.readlines()
@@ -104,6 +109,8 @@ class Labirynt:
     def tegn2(self):# metode som tegner labirynten
         for x in self.liste:# går igjennom alle labiryntdelene (som er lagt i en liste) og tegner de på skjermen
             pygame.draw.rect(skjerm, "purple", x)
+        for x in self.pos:
+            skjerm.blit(mur, (x[0], x[1]))
 
     def byttBane(self, navn): 
         #måten vi har tenkt på er at vi har et rutenett i filen som leses  
@@ -116,6 +123,7 @@ class Labirynt:
         self.liste=[]
         plassy=0
         
+        self.pos=[]
         for z in self.bane: #går igjennom linjene i filen lest(bortsett fra nr1)
             print(z)
 
@@ -130,7 +138,8 @@ class Labirynt:
                 if liste[x]=="x": #vi skjekker om ellementet i listen vi er på er lik "x" (det vi har bestemt betyr vegg)
                     #dersom dette er sant legger vi til et rektangel med denne plaseringen inn i en liste med alle laberyntfirkantene
                     self.rekt= pygame.Rect((x*self.strx, plassy), (self.strx, self.stry))
-
+                    pos=[x*self.strx, plassy]
+                    self.pos.append(pos)
                     self.liste.append(self.rekt)
             plassy+=self.stry# holder styr på hvilken rad vi er på
         print (self.liste)
@@ -162,9 +171,13 @@ class Fiende:
         #print("oink")
     def tegn2(self):
         #skjerm.blit(blue_image, (self.x, self.y))
-        for x in self.rektliste:
-            pygame.draw.rect(skjerm, "blue", x)
+        #for x in self.rektliste:
+        #    pygame.draw.rect(skjerm, "blue", x)
             #pygame.Rect.colliderect(self.rekt, pack.rekt):
+        for x in self.spøk:
+            skjerm.blit(blue_image, (x[0], x[1]))
+
+            
 
     def byttBane(self, navn):# benytttes hver gang man skal ha ny bane
         #som skrevet lenger oppe så har vi tenkt på spillebanen som et rutenett
@@ -247,17 +260,24 @@ class Poeng: #klasse for myntene
 #importerer nødvendige biblioteker
 import random
 import pygame 
+import time
 
 #initsialiserer pygame
 pygame.init()
 
-#husk be Andre komentere sprite 
+#laster ned alle png bildene
 blue_image= pygame.image.load("MicrosoftTeams-image (6).png")
 blue_rect= blue_image.get_rect()
-pakman= pygame.image.load("MicrosoftTeams-image (7).png")
-pak_rect= blue_image.get_rect()
+pakmanvenstre= pygame.image.load("packve.png")
+pakmanhøyre= pygame.image.load("packhø.png")
+pakmanopp=pygame.image.load("packopp.png")
+pakmaned=pygame.image.load("packned.png")
+mur=pygame.image.load("mur.png")
+mur_rekt=mur.get_rect()
+pakman=pakmanvenstre
+pak_rect= pakmanvenstre.get_rect()
 penge= pygame.image.load("MicrosoftTeams-image (8).png")
-penge_rect= blue_image.get_rect()
+penge_rect= penge.get_rect()
 
 #bestemmer størelse på skjerm
 skjerm= pygame.display.set_mode((800,800))
@@ -265,7 +285,9 @@ skjerm= pygame.display.set_mode((800,800))
 #gjør klar slik at vi senere kan skrive på skjerm i bestemte størelser
 pygame.font.init()
 font= pygame.font.SysFont("Arial", int(skjerm.get_height()/20))
-font2= pygame.font.SysFont("Arial", int(skjerm.get_height()/4))
+#font2= pygame.font.SysFont("Arial", int(skjerm.get_height()/4))
+font3= pygame.font.SysFont("Arial", int(skjerm.get_height()/14))
+
 
 
 
@@ -289,14 +311,27 @@ igang=False
 slutt=False
 sluttvunnet= False
 
+sound=False
+# lydfilene
+coin = pygame.mixer.Sound("collect.mp3")
+game_over=pygame.mixer.Sound("gameover.mp3")
+pygame.mixer.music.load("soundtrack.mp3")
+vinne=pygame.mixer.Sound("vinnemusikk.mp3")
+start_tid=time.time()
+
+bakgrunn= pygame.image.load("bakgrunn.jpg")
+
 sum=0
 bane=0
 while running:
     for event in pygame.event.get(): #skjekker om spiller har trykket på X knappen i gjørne av skjermen og går ut av spillet dersom dette 
         if event.type==pygame.QUIT:
             running=False
+
     klokke.tick(30)
-    skjerm.fill("black") # fyller skjermen med svart
+    #skjerm.fill("black") # fyller skjermen med svart
+    skjerm.blit(bakgrunn,(0, 0))
+
     if start:
         tast= pygame.key.get_pressed()
         if tast[pygame.K_SPACE]: #skjekker om mellomromknappen er trykket
@@ -305,11 +340,20 @@ while running:
             igang=True
         #skriver nyttig info til spilleren på skjermen
         tekst=font.render("Klikk mellomrom for å starte", True, "White")
+        tekst_rect= tekst.get_rect(center= (skjerm.get_width()/2, skjerm.get_height()/2))
         tekst2=font.render("Det er 4 nivåer", True, "White")
+        tekst2_rect= tekst2.get_rect(center= (skjerm.get_width()/2, skjerm.get_height()/16*9))
         tekst3=font.render("få fem poeng for å nå neste nivå", True, "White")
-        skjerm.blit(tekst, (skjerm.get_width()/3, skjerm.get_height()/2))
-        skjerm.blit(tekst2, (skjerm.get_width()/3, skjerm.get_height()/2+40))
-        skjerm.blit(tekst3, (skjerm.get_width()/3, skjerm.get_height()/2+80))
+        tekst3_rect= tekst3.get_rect(center= (skjerm.get_width()/2, skjerm.get_height()/16*10))
+        tekst4=font3.render("Pyman", True, "yellow")
+        tekst4_rect= tekst4.get_rect(center= (skjerm.get_width()/2, skjerm.get_height()/5*2))
+
+
+        skjerm.blit(tekst, tekst_rect)
+        skjerm.blit(tekst2, tekst2_rect)
+        skjerm.blit(tekst3, tekst3_rect)
+        skjerm.blit(tekst4, tekst4_rect)
+
     elif igang:
         #oppdaterer (ting går dit det skal osv) og tegner delene på skjermen
         pack.oppdater()
@@ -319,14 +363,18 @@ while running:
         pack.tegn2()
         if poeng.oppdater(): #denne metoden returnerer true dersom spiller har tatt mynten
             sum+=1 #legger en til i telling av poeng
+            coin.play() # Lager lyd hver gang en mynt plukkes opp
         poeng.tegn2()
-        if sum>=5: # skjekker om spiller har fått nokk poeng for å komme til neste brett
+        if sum>=1: # skjekker om spiller har fått nokk poeng for å komme til neste brett
             sum=0 # resetter tellingen til 0
             if bane>=(len(baner)): #her skjekker vi om vi har kommet gjennom alle banene.
                 # måten vi gjør dette er å sammenligne lengden av listen med filer med en variabel som teller hvilken bane vi er på 
                 #hvis vi nå har kommet gjennom alle banene vi variabelene som holder styr på fase i spillet opptateres
                 igang=False
                 sluttvunnet=True
+                pygame.mixer.music.stop()
+                vinne.play()
+
             else: #hvis ikke spilleren er ferdig med alle banene vil vi sende neste banefil inn i metoden byttBane for å bytte bane
                 lab.byttBane(baner[bane])
                 pack.byttBane(baner[bane])
@@ -339,13 +387,51 @@ while running:
         if pack.livEllerDød()==False: #denne metoden returnerer False dersom packman har truffet en fiende.
             igang=False
             slutt=True #merk denne slutt variabelen har et annet navn enn den som blir true dersom spiller har vunnet
+            game_over.play()
+            pygame.mixer.music.stop()
+
+        
+        # Lager bakgrunnsmusikken for spillet
+        print(time.time() - start_tid) # Printer ut hvor lenge musikken har spilt
+        if (sound == False): # Sjekker om musikken er pågående
+            pygame.mixer.music.play()
+            sound = True
+        if(time.time() - start_tid >= 156): # Når musikken er spilt ferdig, starter den på nytt
+            start_tid = time.time()
+            pygame.mixer.music.play()
+            sound = False
         
     if slutt: #her har spilleren tapt spillet og denne infoen skrives på skjermen
         tekst3= font.render((f"du tapte"), True, "White")
-        skjerm.blit(tekst3, (skjerm.get_width()/3, skjerm.get_height()/2))
+        tekst3_rect= tekst3.get_rect(center= (skjerm.get_width()/2, skjerm.get_height()/2))
+        skjerm.blit(tekst3, tekst3_rect)
+        tekst4= font.render((f"klikk mellomrom for å starte på nytt"), True, "White")
+        tekst4_rect= tekst4.get_rect(center= (skjerm.get_width()/2, skjerm.get_height()/3))
+        skjerm.blit(tekst4, tekst4_rect)
+
     if sluttvunnet:# her har spilleren vunnet og dette vises på skjermen
         tekst3= font.render((f"du vant"), True, "White")
-        skjerm.blit(tekst3, (skjerm.get_width()/3, skjerm.get_height()/2))
+        tekst3_rect= tekst3.get_rect(center= (skjerm.get_width()/2, skjerm.get_height()/2))
+        skjerm.blit(tekst3, tekst3_rect)
+        tekst4= font.render((f"klikk mellomrom for å starte på nytt"), True, "White")
+        tekst4_rect= tekst4.get_rect(center= (skjerm.get_width()/2, skjerm.get_height()/3))
+        skjerm.blit(tekst4, tekst4_rect)
+    tast= pygame.key.get_pressed()
+    if tast[pygame.K_SPACE] and start==False and igang==False: #skjekker om mellomromknappen er trykket
+            #dersom mellomrom er trykket så er spillet ikke i start-fasen lenger men i igang-fasen, derfor oppdaterer vi variablene
+            start=False
+            igang=True
+            sluttvunnet=False 
+            slutt=False
+            pygame.mixer.music.stop()
+            lab.byttBane("test.txt")
+            pack.byttBane("test.txt")
+            fiende.byttBane("test.txt")
+            sum=0
+            bane=0
+            sound = False
+
+
 
     pygame.display.flip()
 
